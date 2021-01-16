@@ -1,11 +1,11 @@
 package dev.alexnader.genome_map
 
-import parser.GenBankParser
+import parser.GenBank
 
 import java.nio.file.{Files, Paths}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
-object Main extends App with GenBankParser {
+object Main extends App with GenBank.Parser {
 //    CgviewTest.test()
 
     val input = Files.readAllLines(Paths.get("Genome.gb")).asScala.mkString("\n")
@@ -37,13 +37,4 @@ object Main extends App with GenBankParser {
         case Failure(msg, _) => println(s"failure: $msg")
         case Error(msg, _) => println(s"error: $msg")
     }
-//
-//    parse(field("[^\n]*".r), input) match {
-//        case Success(matched, test) =>
-//            println("success")
-//            println(test)
-//            println(matched)
-//        case Failure(msg, _) => println(s"failure: $msg")
-//        case Error(msg, _) => println(s"error: $msg")
-//    }
 }
