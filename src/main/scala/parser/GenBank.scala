@@ -68,13 +68,13 @@ object GenBank {
             " +".r ~ """\w+""".r ~ " +".r ~ location ~ "\n" ~ featureEntries ^^ { case _ ~ kind ~ _ ~ location ~ _ ~ entries => Feature(location, kind, entries) }
 
         def featuresHeader: Parser[Unit] =
-            ("FEATURES" ~ ".*".r ~ "\n").map(_ => ())
+            "FEATURES" ~ ".*".r ~ "\n" ^^ (_ => ())
 
         def features: Parser[List[Feature]] =
             featuresHeader ~> feature.*
 
         def originHeader: Parser[Unit] =
-            ("ORIGIN" ~ ".*".r ~ "\n").map(_ => ())
+            "ORIGIN" ~ ".*".r ~ "\n" ^^ (_ => ())
 
         def originLine: Parser[String] =
             " +".r ~> """\d+""".r ~> (" " ~> "[atcg]+".r).* <~ "\n" ^^ { _.mkString }
