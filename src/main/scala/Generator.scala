@@ -8,7 +8,7 @@ import java.awt.Color
 import scala.collection.mutable
 import scala.util.Random
 
-object CgviewTest {
+object Generator {
     def visualize(data: GenBank, applySettings: Cgview => Unit): Cgview = {
         val cgview = new Cgview(data.genome.length)
         applySettings(cgview)

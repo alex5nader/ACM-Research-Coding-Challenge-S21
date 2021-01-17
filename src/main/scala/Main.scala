@@ -12,7 +12,7 @@ object Main extends App with GenBank.Parser {
 
     parse(genbank, input) match {
         case Success(data, _) =>
-            val cgview = CgviewTest.visualize(data, { cgview =>
+            val cgview = Generator.visualize(data, { cgview =>
                 cgview.setTitle(data.fields("SOURCE").description)
 
                 cgview.setBackboneRadius(160)
