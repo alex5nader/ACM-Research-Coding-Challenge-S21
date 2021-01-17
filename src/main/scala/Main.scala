@@ -2,38 +2,29 @@ package dev.alexnader.genome_map
 
 import parser.GenBank
 
+import ca.ualberta.stothard.cgview.CgviewIO
+
 import java.nio.file.{Files, Paths}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 object Main extends App with GenBank.Parser {
-//    CgviewTest.test()
-
     val input = Files.readAllLines(Paths.get("Genome.gb")).asScala.mkString("\n")
 
-    parse(phrase(genbank), input) match {
+    parse(genbank, input) match {
         case Success(data, _) =>
-            println("success")
-            for (field <- data.fields) {
-                println(field.name)
+            val cgview = CgviewTest.visualize(data, { cgview =>
+                cgview.setTitle(data.fields("SOURCE").description)
 
-                field.description.split("\n").foreach(x => println("\t" + x))
+                cgview.setBackboneRadius(160)
 
-                for (entry <- field.entries) {
-                    println("\t" + entry._1)
-                    entry._2.split("\n").foreach(x => println("\t\t" + x))
-                }
-                println()
-            }
+                cgview.setLabelPlacementQuality(0)
+                cgview.setLabelLineLength(30)
+                cgview.setLabelLineThickness(0.5f)
 
-            for (feature <- data.features) {
-                println(s"${feature.kind} @ ${feature.location}")
+                cgview.setDrawLegends(true)
+            })
 
-                feature.entries.foreach { case (k, v) => println(s"$k: $v") }
-
-                println()
-            }
-
-            println(data.genome)
+            CgviewIO.writeToSVGFile(cgview, "circular_genome_map.svg", false)
         case Failure(msg, _) => println(s"failure: $msg")
         case Error(msg, _) => println(s"error: $msg")
     }

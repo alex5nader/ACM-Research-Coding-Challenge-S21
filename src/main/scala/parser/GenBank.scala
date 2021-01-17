@@ -83,8 +83,8 @@ object GenBank {
             originHeader ~> originLine.* ^^ { _.mkString }
 
         def genbank: Parser[GenBank] =
-            field.* ~ features ~ origin ~ "//" ^^ { case fields ~ features ~ origin ~ _ => GenBank(fields, features, origin) }
+            phrase(field.* ~ features ~ origin ~ "//" ^^ { case fields ~ features ~ origin ~ _ => GenBank(fields.map { f => f.name -> f }.toMap, features, origin) })
     }
 }
 
-case class GenBank(fields: List[Field], features: List[Feature], genome: String)
+case class GenBank(fields: Map[String, Field], features: List[Feature], genome: String)
